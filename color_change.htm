@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color change with Audio</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* 100% of the viewport height */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* Align items at the bottom */
+            align-items: center; /* Center items horizontally */
+        }
+
+        #start, #stop {
+            margin: 5px;
+            width: 200px;
+        }
+
+        img {
+            position: relative;
+            width: 200px; /* Set the width as needed */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        img::before,
+        img::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 0, 0, 0.1); /* Adjust color and opacity as needed */
+            z-index: -1;
+            animation: moveEffect 1s infinite linear alternate; /* Adjust animation duration and timing function */
+        }
+
+        @keyframes moveEffect {
+            0% {
+                transform: translate(-50px, -50px);
+            }
+            30% {
+                transform: translateX(200px) translateY(0);
+            }
+            100% {
+                transform: translateX(5px) translateY(5px);
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <img src="p_co2.png" alt="pika">
+
+    <button id="start" onclick="change_start()">Start</button>
+    <button id="stop" onclick="stop()">Stop</button>
+
+    <script>
+        const gen_color = "0123456789abcdef";
+        let interid; // Variable to store the interval ID
+        let audio = new Audio('pika.mp3'); // Create an Audio object
+        
+        function change_co() {
+            let co_code = "#";
+            const codeLength = 6; 
+            for (let i = 0; i < codeLength; i++) {
+                let randomIndex = Math.floor(Math.random() * gen_color.length);
+                co_code += gen_color.charAt(randomIndex);
+            }
+            console.log(co_code);
+            let bg_color = document.querySelector('body');
+            bg_color.style.backgroundColor = co_code;
+        }
+
+        function change_start() {
+            interid = setInterval(change_co, 2000);
+            audio.play(); // Start playing the audio
+        }
+
+        function stop() {
+            clearInterval(interid);
+            audio.pause(); // Pause the audio
+            audio.currentTime = 0; // Reset the audio to the beginning
+        }
+    </script>
+
+</body>
+</html>
